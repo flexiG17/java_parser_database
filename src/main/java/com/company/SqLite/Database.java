@@ -76,7 +76,7 @@ public class Database {
     public static void Write(Student student) throws SQLException {
         var courses = student.getAllCourseData();
 
-        insertPerson(
+        AddPersonsWithVkData(
                 new String[]{
                         student.getName(),
                         student.getSurname(),
@@ -91,7 +91,7 @@ public class Database {
                     "WHERE name='" + student.getName() + "' " +
                         "AND surname= '" + student.getSurname() + "' " +
                         "AND vkId=" + student.getVkId() + ";").getInt("personId");
-        var coursesIds = insertCourses(courses, student_id);
+        var coursesIds = AddCoursesFromParsedCsv(courses, student_id);
 
         for (var id : coursesIds) {
             var query =
@@ -136,7 +136,7 @@ public class Database {
         }
     }
 
-    private static void insertPerson(String[] person) {
+    private static void AddPersonsWithVkData(String[] person) {
         var builder = new StringBuilder();
         for (var i : person) {
             builder.append("'").append(i).append("'").append(", ");
@@ -153,7 +153,7 @@ public class Database {
         }
     }
 
-    private static List<Integer> insertCourses(List<MainData> courses, int student_id) throws SQLException {
+    private static List<Integer> AddCoursesFromParsedCsv(List<MainData> courses, int student_id) throws SQLException {
         var result = new ArrayList<Integer>();
         for (var course : courses) {
             //---Записываем основные данные курса---------------------
